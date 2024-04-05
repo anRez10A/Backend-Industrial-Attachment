@@ -46,9 +46,8 @@ app.post('/recipes', async (req, res, next) => {
       const recipe = await recipeCollection.insertOne({
         recipeName,
         ingredients,
-          description,
-          category,
-         
+        description,
+        category
       });
 
       return res.status(200).json(recipe);
