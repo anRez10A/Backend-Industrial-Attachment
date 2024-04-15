@@ -76,6 +76,10 @@ app.delete('/recipes/:id', authMiddleware,async (req, res, next) => {
 
 app.post('/users', async (req, res, next) => {
     const { userName, email, password} = req.body;
+    if (!userName || !email || !password) {
+      return res.status(400).json({ message: 'All fields are required.' });
+   }
+  
     try {
         await client.connect();
         const database = client.db('recipeBook');
@@ -146,3 +150,8 @@ app.get('/login/customer', authMiddleware, async (req, res, next) => {
      return res.json({checked: 'true'});
 
 });
+
+
+
+
+ 
