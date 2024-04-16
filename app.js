@@ -125,7 +125,7 @@ app.post('/login', async (req, res, next) => {
 
                 console.log('Generated Token:', authToken); // Log the token
 
-                return res.json({token: authToken, success: true});
+                return res.json({token: authToken, success: true,name:user.userName});
                 
             }
             else{
@@ -151,7 +151,11 @@ app.get('/login/customer', authMiddleware, async (req, res, next) => {
 
 });
 
-
-
-
+app.get('/recipes/:id', async (req, res) => {
+  await client.connect();
+  const database = client.db('recipeBook');
+  const recipeCollection = database.collection('recipe');
+  const recipe = await recipeCollection.findOne({ _id: new ObjectId(req.params.id) });
+  return res.status(200).json(recipes);
+});
  
