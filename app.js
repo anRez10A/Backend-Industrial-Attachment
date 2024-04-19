@@ -151,11 +151,18 @@ app.get('/login/customer', authMiddleware, async (req, res, next) => {
 
 });
 
-app.get('/recipes/:id', async (req, res) => {
-  await client.connect();
-  const database = client.db('recipeBook');
-  const recipeCollection = database.collection('recipe');
-  const recipe = await recipeCollection.findOne({ _id: new ObjectId(req.params.id) });
-  return res.status(200).json(recipes);
+app.get('recipes/:id', authMiddleware, async (req, res, next) => {
+  const { id } = req.params;
+  try {
+      await client.connect();
+      const database = client.db('recipeBook');
+      const recipeCollection = database.collection('recipe');
+      const query = {"_id": new ObjectId(id)};
+      const task = await recipeCollection.findOne(query);
+      return res.status(200).json(task);
+  } finally {
+      // Ensures that the client will close when you finish/error
+      await client.close();
+  }   
 });
  
